@@ -1,0 +1,7 @@
+---
+title: "Where to live in Bristol"
+output: html_notebook
+---
+
+I want to make an interactive map using `leaflet` to decide where to live in Bristol 
+
