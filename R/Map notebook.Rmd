@@ -5,3 +5,19 @@ output: html_notebook
 
 I want to make an interactive map using `leaflet` to decide where to live in Bristol 
 
+```{r packages, message=FALSE}
+library(leaflet)
+library(rgdal)
+```
+
+```{r read shapefile. message=FALSE}
+shp <- readOGR(".","~/Data/ST03_line.shp")
+
+```
+```{r map}
+m <- leaflet() %>%
+        addTiles() %>%
+        setView(-2.5879, 51.4545, zoom = 12)
+m
+
+```
