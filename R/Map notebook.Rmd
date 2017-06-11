@@ -1,22 +1,45 @@
 ---
 title: "Where to live in Bristol"
-output: html_notebook
+output:
+  html_document: default
+  html_notebook: default
 ---
 
 I want to make an interactive map using `leaflet` to decide where to live in Bristol 
 
-```{r packages, message=FALSE}
+```{r packages, message=FALSE, echo=FALSE}
 library(leaflet)
 library(rgdal)
 ```
 
-```{r read shapefile. message=FALSE}
-shp <- readOGR(".","~/Data/ST03_line.shp")
 
+```{r read shapefile, message=FALSE, echo=FALSE}
+shp57 <- readOGR(paste0(substr(getwd(),1,nchar(getwd())-2),"/Data"),
+               "ST57_line",
+               verbose=F)
+
+shp67 <- readOGR(paste0(substr(getwd(),1,nchar(getwd())-2),"/Data"),
+               "ST67_line",
+               verbose=F)
+
+
+
+shp57 <- sp::spTransform(shp57, CRS("+init=epsg:4326"))
+shp67 <- sp::spTransform(shp67, CRS("+init=epsg:4326"))
+
+shp <- rbind(shp57, shp67)
 ```
-```{r map}
-m <- leaflet() %>%
+
+```{r map, echo=FALSE}
+
+pal <- colorNumeric(
+  palette = "Reds",
+  domain = shp$PROP_VALUE)
+
+m <- leaflet(shp) %>%
         addTiles() %>%
+        addPolylines(weight = 2,
+                     color = ~pal(PROP_VALUE)) %>%
         setView(-2.5879, 51.4545, zoom = 12)
 m
 
